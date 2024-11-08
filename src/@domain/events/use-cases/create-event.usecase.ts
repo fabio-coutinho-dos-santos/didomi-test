@@ -64,7 +64,7 @@ export class CreateEventUseCase {
           consent.id as EventsNames,
           consent.enabled,
         );
-        console.log(await this.eventsRepository.createOrUpdate(event));
+        await this.eventsRepository.createOrUpdate(event);
       }),
     );
   }

@@ -22,6 +22,6 @@ export class UsersSchema {
   @UpdateDateColumn({ default: 'now()' })
   updated_at: Date;
 
-  @OneToMany(() => EventsSchema, (event) => event.user)
+  @OneToMany(() => EventsSchema, (event) => event.user, { onDelete: 'CASCADE' })
   events: EventsSchema[];
 }

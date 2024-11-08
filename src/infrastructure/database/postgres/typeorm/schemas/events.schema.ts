@@ -29,7 +29,7 @@ export class EventsSchema {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => UsersSchema, (user) => user.events)
+  @ManyToOne(() => UsersSchema, (user) => user.events, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: UsersSchema;
 }

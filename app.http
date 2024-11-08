@@ -2,7 +2,7 @@ POST http://localhost:3000/users
 Content-type: application/json
 
 {
-    "email": "fdddsddfdd@gmail.com"
+    "email": "fdddsddfddmail.com"
 }
 
 ###
@@ -18,9 +18,13 @@ Content-type: application/json
     },
     "consents": [{
         "id": "email_notifications",
-        "enabled": true
+        "enabled": false
     },{
         "id": "sms_notifications",
-        "enabled": true
+        "enabled": false
     }]
 }
+
+###
+
+DELETE http://localhost:3000/users/5cd69ebe-f7ff-4861-9a05-699414f0f403
