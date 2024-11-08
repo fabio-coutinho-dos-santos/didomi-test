@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString, IsUUID, Matches } from 'class-validator';
-import { EventsNames } from '../enums/events.enums';
+import { EventsNames } from '../../../@domain/events/enums/events.enums';
 
 export class CreateEventDto {
   @IsNotEmpty()

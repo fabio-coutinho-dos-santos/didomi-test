@@ -1,6 +1,6 @@
 import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../../app.module';
+import { AppModule } from '../../../app.module';
 import * as request from 'supertest';
 
 describe('UsersController Routes', () => {

@@ -1,13 +1,12 @@
 import {
   Inject,
   Injectable,
-  Logger,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { IUsersRepository } from '../repositories/users.repository.interface';
-import { CreateUserDto } from '../dtos/users.dto';
 import { User } from '../entities/user.entity';
-import { CreateUserPresenter } from '../presenters/create-user.presenter';
+import { CreateUserPresenter } from '../../../application/users/presenters/create-user.presenter';
+import { CreateUserDto } from '../../../application/users/dtos/users.dto';
 
 @Injectable()
 export class CreateUserUseCase {

@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreateEventDto } from '../../@domain/events/dtos/create-event.dto';
+import { CreateEventDto } from '../dtos/create-event.dto';
 
 @Controller('events')
 export class EventsController {
