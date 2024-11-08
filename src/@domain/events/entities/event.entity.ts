@@ -1,6 +1,7 @@
 import { EventsNames } from '../enums/events.enums';
 
 export class Event {
+  private _id?: string;
   constructor(
     private _user_id: string,
     private _name: EventsNames,
@@ -38,7 +39,7 @@ export class Event {
     return this._name;
   }
 
-  set userId(userId: string) {
+  set user_id(userId: string) {
     this._user_id = userId;
   }
 
@@ -52,5 +53,13 @@ export class Event {
 
   set enabled(enabled: boolean) {
     this._enabled = enabled;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(id: string) {
+    this._id = id;
   }
 }

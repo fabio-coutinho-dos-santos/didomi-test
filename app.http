@@ -2,11 +2,11 @@ POST http://localhost:3000/users
 Content-type: application/json
 
 {
-    "email": "fdddsddfdd@gmail.com"
+    "email": "fdddsddfddmail.com"
 }
 
 ###
-GET http://localhost:3000
+GET http://localhost:3000/users
 
 ###
 POST http://localhost:3000/events
@@ -14,13 +14,17 @@ Content-type: application/json
 
 {
     "user": {
-        "id": "5cd69ebe-f7ff-4861-9a05-699414f0f403"
+        "id": "89e63e3b-025c-415c-bd5e-96fd0a0d3040"
     },
     "consents": [{
         "id": "email_notifications",
         "enabled": false
     },{
         "id": "sms_notifications",
-        "enabled": true
+        "enabled": false
     }]
 }
+
+###
+
+DELETE http://localhost:3000/users/5cd69ebe-f7ff-4861-9a05-699414f0f403

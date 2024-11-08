@@ -8,6 +8,7 @@ export class EventsController {
   private readonly createEventUseCase: CreateEventUseCase;
 
   @Post('')
+  // @UseFilters(ExceptionsFilter)
   async createEvent(@Body() input: CreateEventDto): Promise<any> {
     await this.createEventUseCase.execute(input);
   }

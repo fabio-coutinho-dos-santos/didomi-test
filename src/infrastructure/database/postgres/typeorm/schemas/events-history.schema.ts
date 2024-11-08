@@ -20,12 +20,12 @@ export class EventsHistorySchema {
   name: string;
 
   @Column({ type: 'boolean', nullable: false })
-  value: string;
+  enabled: string;
 
-  @CreateDateColumn({ default: 'now()' })
+  @CreateDateColumn()
   created_at: Date;
 
-  @ManyToOne(() => UsersSchema, (user) => user.events)
+  @ManyToOne(() => UsersSchema, (user) => user.events, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: UsersSchema;
 }
