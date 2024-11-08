@@ -1,5 +1,5 @@
 import { IRespository } from 'src/@domain/@shared/repository.interface';
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class BaseRepository<T> implements IRespository<T> {
@@ -7,6 +7,10 @@ export abstract class BaseRepository<T> implements IRespository<T> {
 
   protected constructor(repository: Repository<T>) {
     this.repository = repository;
+  }
+
+  async findAll(): Promise<T[]> {
+    return await this.repository.find();
   }
 
   async delete(id: string): Promise<void> {

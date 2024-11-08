@@ -1,10 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { CreateEventDto } from '../dtos/create-event.dto';
+import { CreateEventUseCase } from 'src/@domain/events/use-cases/create-event.usecase';
 
 @Controller('events')
 export class EventsController {
+  @Inject(CreateEventUseCase)
+  private readonly createEventUseCase: CreateEventUseCase;
+
   @Post('')
   async createEvent(@Body() input: CreateEventDto): Promise<any> {
-    return 'Event created';
+    await this.createEventUseCase.execute(input);
   }
 }

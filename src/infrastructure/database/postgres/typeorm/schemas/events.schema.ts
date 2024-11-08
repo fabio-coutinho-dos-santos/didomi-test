@@ -21,7 +21,7 @@ export class EventsSchema {
   name: string;
 
   @Column({ type: 'boolean', nullable: false })
-  value: string;
+  enabled: string;
 
   @CreateDateColumn({ default: 'now()' })
   created_at: Date;

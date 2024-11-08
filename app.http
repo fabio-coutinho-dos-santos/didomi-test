@@ -6,10 +6,21 @@ Content-type: application/json
 }
 
 ###
+GET http://localhost:3000
+
+###
 POST http://localhost:3000/events
 Content-type: application/json
 
 {
-    "name": "email_notifications",
-    "userId": "61951236-b446-426f-8ecd-4284ea3c0775"
+    "user": {
+        "id": "5cd69ebe-f7ff-4861-9a05-699414f0f403"
+    },
+    "consents": [{
+        "id": "email_notifications",
+        "enabled": false
+    },{
+        "id": "sms_notifications",
+        "enabled": true
+    }]
 }

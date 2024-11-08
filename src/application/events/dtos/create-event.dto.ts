@@ -1,13 +1,36 @@
-import { IsEnum, IsNotEmpty, IsString, IsUUID, Matches } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsEnum,
+  IsObject,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { EventsNames } from '../../../@domain/events/enums/events.enums';
+import { Type } from 'class-transformer';
+
+export class ConsentDto {
+  @IsEnum(EventsNames)
+  id: string;
+
+  @IsBoolean()
+  enabled: boolean;
+}
+
+export class UserDto {
+  @IsUUID()
+  id: string;
+}
 
 export class CreateEventDto {
-  @IsNotEmpty()
-  @IsString()
-  @IsEnum(EventsNames)
-  name: string;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => UserDto)
+  user: UserDto;
 
-  @IsNotEmpty()
-  @IsUUID()
-  userId: string;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ConsentDto)
+  consents: ConsentDto[];
 }

@@ -5,4 +5,5 @@ export interface IRespository<T> {
   findByField(field: string, value: unknown): Promise<T>;
   delete(id: string): Promise<void>;
   update(entity: QueryDeepPartialEntity<T>, id: string): Promise<T>;
+  findAll(): Promise<T[]>;
 }

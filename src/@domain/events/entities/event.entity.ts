@@ -2,8 +2,9 @@ import { EventsNames } from '../enums/events.enums';
 
 export class Event {
   constructor(
-    private _userId: string,
+    private _user_id: string,
     private _name: EventsNames,
+    private _enabled: boolean,
   ) {
     this.validate();
   }
@@ -12,10 +13,10 @@ export class Event {
     const uuidv4Regex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-    if (!this._userId) {
+    if (!this._user_id) {
       throw new Error('User ID is required');
     }
-    if (!uuidv4Regex.test(this._userId)) {
+    if (!uuidv4Regex.test(this._user_id)) {
       throw new Error('Invalid user ID format');
     }
     if (!this._name) {
@@ -24,10 +25,13 @@ export class Event {
     if (!Object.values(EventsNames).includes(this._name)) {
       throw new Error('Invalid event name');
     }
+    if (this._enabled === undefined) {
+      throw new Error('Event enabled is required');
+    }
   }
 
-  get userId(): string {
-    return this._userId;
+  get user_id(): string {
+    return this._user_id;
   }
 
   get name(): EventsNames {
@@ -35,10 +39,18 @@ export class Event {
   }
 
   set userId(userId: string) {
-    this._userId = userId;
+    this._user_id = userId;
   }
 
   set name(name: EventsNames) {
     this._name = name;
+  }
+
+  get enabled(): boolean {
+    return this._enabled;
+  }
+
+  set enabled(enabled: boolean) {
+    this._enabled = enabled;
   }
 }
