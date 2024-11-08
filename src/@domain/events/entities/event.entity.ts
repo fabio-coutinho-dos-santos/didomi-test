@@ -1,9 +1,6 @@
 import { EventsNames } from '../enums/events.enums';
 
 export class Event {
-  private uuidv4Regex =
-    /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
   constructor(
     private _userId: string,
     private _name: EventsNames,
@@ -12,10 +9,13 @@ export class Event {
   }
 
   private validate() {
+    const uuidv4Regex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
     if (!this._userId) {
       throw new Error('User ID is required');
     }
-    if (!this.uuidv4Regex.test(this._userId)) {
+    if (!uuidv4Regex.test(this._userId)) {
       throw new Error('Invalid user ID format');
     }
     if (!this._name) {
