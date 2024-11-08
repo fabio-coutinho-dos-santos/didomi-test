@@ -1,0 +1,27 @@
+@startuml
+
+entity users {
+    id (PK): varchar [40]
+    email: varchar [100]
+}
+
+entity events {
+  id (PK): varchar[40]
+  user_id (FK): varchar[40]
+  event_name: enum ['email_notifications', 'sms_notifications']
+  value: boolean
+  created_at: datetime
+  updated_at: datetime
+}
+
+entity events_history {
+  id (PK): varchar[40]
+  user_id (FK): varchar[40]
+  event_name: enum ['email_notifications', 'sms_notifications']
+  value: boolean
+  created_at: datetime
+}
+
+users "1"--o{"*" events 
+users "1"--o{"*" events_history
+@enduml

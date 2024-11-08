@@ -1,0 +1,54 @@
+version: '3.7'
+
+services:
+  svc-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    networks:
+      - didomi-net
+    depends_on:
+      - svc-db
+
+  svc-db:
+    image: postgres:12
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - didomi-net
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+
+  svc-db-test:
+    image: postgres:12
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - pgdata-test:/var/lib/postgresql/data
+    networks:
+      - didomi-net
+
+volumes:
+  pgdata:
+  pgdata-test:
+
+networks:
+  didomi-net:
+    external:
+      name: didomi-net

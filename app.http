@@ -1,0 +1,15 @@
+POST http://localhost:3000/users
+Content-type: application/json
+
+{
+    "email": "teste@gmail.com"
+}
+
+###
+POST http://localhost:3000/events
+Content-type: application/json
+
+{
+    "name": "email_notifications",
+    "userId": "61951236-b446-426f-8ecd-4284ea3c0775"
+}
