@@ -23,10 +23,10 @@ export class EventsSchema {
   @Column({ type: 'boolean', nullable: false })
   enabled: string;
 
-  @CreateDateColumn({ default: 'now()' })
+  @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn({ default: 'now()' })
+  @UpdateDateColumn()
   updated_at: Date;
 
   @ManyToOne(() => UsersSchema, (user) => user.events)

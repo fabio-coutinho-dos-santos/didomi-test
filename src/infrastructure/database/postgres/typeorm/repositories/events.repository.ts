@@ -15,4 +15,23 @@ export class EventsRepository
   ) {
     super(eventsRepository);
   }
+
+  async createOrUpdate(event: Event): Promise<Event> {
+    const eventStored = await this.eventsRepository.findOne({
+      where: {
+        user_id: event.user_id,
+        name: event.name,
+      },
+    });
+    if (eventStored) {
+      await this.eventsRepository.update(eventStored.id, {
+        enabled: event.enabled,
+      });
+      return await this.eventsRepository.findOne({
+        where: { id: eventStored.id },
+      });
+    } else {
+      return await this.eventsRepository.save(event);
+    }
+  }
 }

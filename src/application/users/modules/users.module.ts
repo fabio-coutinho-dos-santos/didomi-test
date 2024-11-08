@@ -4,6 +4,7 @@ import { UsersRepository } from '../../../infrastructure/database/postgres/typeo
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CreateUserUseCase } from 'src/@domain/users/use-cases/create-user.usecase';
+import { GetAllUsersUseCase } from 'src/@domain/users/use-cases/get-all-users.usecase';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UsersSchema])],
@@ -14,6 +15,7 @@ import { CreateUserUseCase } from 'src/@domain/users/use-cases/create-user.useca
       useClass: UsersRepository,
     },
     CreateUserUseCase,
+    GetAllUsersUseCase,
   ],
   exports: [
     {

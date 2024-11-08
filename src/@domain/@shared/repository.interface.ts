@@ -1,3 +1,4 @@
+import { FindManyOptions } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export interface IRespository<T> {
@@ -6,4 +7,5 @@ export interface IRespository<T> {
   delete(id: string): Promise<void>;
   update(entity: QueryDeepPartialEntity<T>, id: string): Promise<T>;
   findAll(): Promise<T[]>;
+  findWithRelations(relations: FindManyOptions<T>): Promise<T[]>;
 }
