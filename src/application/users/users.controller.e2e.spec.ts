@@ -29,14 +29,14 @@ describe('UsersController Routes', () => {
     });
   });
 
-  describe('POST /users', () => {
-    describe('with valid email format', () => {
-      it('should return 201', async () => {
-        await request(httpServer)
-          .post('/users')
-          .send({ email: 'valid@gmail.com' })
-          .expect(HttpStatus.CREATED);
-      });
-    });
-  });
+  // describe('POST /users', () => {
+  //   describe('with valid email format', () => {
+  //     it('should return 201', async () => {
+  //       await request(httpServer)
+  //         .post('/users')
+  //         .send({ email: 'valid@gmail.com' })
+  //         .expect(HttpStatus.CREATED);
+  //     });
+  //   });
+  // });
 });

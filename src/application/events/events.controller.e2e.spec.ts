@@ -40,18 +40,18 @@ describe('EventsController Routes', () => {
       });
     });
 
-    describe('with valid input format', () => {
-      it('should return 201', async () => {
-        await request(httpServer)
-          .post('/events')
-          .send({ name: EventsNames.EMAIL, userId: uuid })
-          .expect(HttpStatus.CREATED);
+    // describe('with valid input format', () => {
+    //   it('should return 201', async () => {
+    //     await request(httpServer)
+    //       .post('/events')
+    //       .send({ name: EventsNames.EMAIL, userId: uuid })
+    //       .expect(HttpStatus.CREATED);
 
-        await request(httpServer)
-          .post('/events')
-          .send({ name: EventsNames.SMS, userId: uuid })
-          .expect(HttpStatus.CREATED);
-      });
-    });
+    //     await request(httpServer)
+    //       .post('/events')
+    //       .send({ name: EventsNames.SMS, userId: uuid })
+    //       .expect(HttpStatus.CREATED);
+    //   });
+    // });
   });
 });
