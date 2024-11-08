@@ -7,14 +7,14 @@ import {
 import { IUsersRepository } from '../repositories/users.repository.interface';
 import { CreateUserDto } from '../dtos/users.dto';
 import { User } from '../entities/user.entity';
-import { UserPresenter } from '../presenters/create-user.presenter';
+import { CreateUserPresenter } from '../presenters/create-user.presenter';
 
 @Injectable()
 export class CreateUserUseCase {
   @Inject('IUsersRepository')
   private readonly userRepository: IUsersRepository;
 
-  async execute(input: CreateUserDto): Promise<UserPresenter> {
+  async execute(input: CreateUserDto): Promise<CreateUserPresenter> {
     const { email } = input;
 
     const oldUser = await this.userRepository.findByField('email', email);
@@ -25,6 +25,6 @@ export class CreateUserUseCase {
 
     const userEntity = new User(email);
     const user = await this.userRepository.create(userEntity);
-    return UserPresenter.toResponse(user);
+    return CreateUserPresenter.toResponse(user);
   }
 }
