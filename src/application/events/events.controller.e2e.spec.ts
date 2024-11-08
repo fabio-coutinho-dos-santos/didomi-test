@@ -2,7 +2,7 @@ import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../../app.module';
-import { EventsNames } from '../../@core/domain/events/events.enums';
+import { EventsNames } from '../../@domain/events/enums/events.enums';
 
 describe('EventsController Routes', () => {
   let app;
