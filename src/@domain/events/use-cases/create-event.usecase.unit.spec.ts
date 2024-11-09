@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { CreateEventUseCase } from './create-event.usecase';
-import { IUsersRepository } from '../../../@domain/users/repositories/users.repository.interface';
-import { IEventsRepository } from '../repositories/events.repository.interface';
-import { IEventsHistoryRepository } from '../repositories/events-history.repository.interface';
 import { CreateEventDto } from '../../../application/events/dtos/create-event.dto';
 import { EventsNames } from '../enums/events.enums';
 import { User } from '../../../@domain/users/entities/user.entity';
@@ -41,9 +38,6 @@ const user = new User('email@gmail.com');
 
 describe('CreateEventUseCase', () => {
   let createEventUseCase: CreateEventUseCase;
-  let usersRepository: IUsersRepository;
-  let eventsRepository: IEventsRepository;
-  let eventsHistoryRepository: IEventsHistoryRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -65,11 +59,6 @@ describe('CreateEventUseCase', () => {
     }).compile();
 
     createEventUseCase = module.get<CreateEventUseCase>(CreateEventUseCase);
-    usersRepository = module.get<IUsersRepository>('IUsersRepository');
-    eventsRepository = module.get<IEventsRepository>('IEventsRepository');
-    eventsHistoryRepository = module.get<IEventsHistoryRepository>(
-      'IEventsHistoryRepository',
-    );
   });
 
   afterEach(() => {

@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsEnum,
   IsObject,
-  IsString,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
