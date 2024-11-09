@@ -5,12 +5,12 @@ name: ci-didomi-test
 on:
   push:
     branches:
-      - development
+      - develop
       - main
 
   pull_request:
     branches:
-      - development
+      - develop
       - main
 
 jobs:
