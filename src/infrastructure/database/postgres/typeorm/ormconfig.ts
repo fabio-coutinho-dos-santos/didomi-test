@@ -15,9 +15,7 @@ export function ormConfig(): any {
       url: configService.get<string>('DB_TEST_URL_CONNECTION'),
       synchronize: false,
       logging: false,
-      entities: [
-        'src/infrastructure/database/typeorm/postgres/entities/**/*schema.ts',
-      ],
+      entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
       timezone: 'Z',
     };
@@ -25,14 +23,9 @@ export function ormConfig(): any {
     return {
       type: 'postgres',
       url: configService.get<string>('DB_URL_CONNECTION'),
-      synchronize: true,
+      synchronize: false,
       logging: false,
-      entities: [
-        // 'dist/@core/infra/database/postgres/typeorm/schemas/**/*schema.js',
-        UsersSchema,
-        EventsSchema,
-        EventsHistorySchema,
-      ],
+      entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
       timezone: 'Z',
     };
