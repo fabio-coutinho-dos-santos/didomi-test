@@ -1,6 +1,4 @@
-import { Event } from 'src/@domain/events/entities/event.entity';
 import { User } from '../../../@domain/users/entities/user.entity';
-import e from 'express';
 
 export class CreateUserPresenter {
   static toResponse(user: User) {

@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IUsersRepository } from '../../repositories/users.repository.interface';
 import { CreateUserUseCase } from '../create-user.usecase';
 import { CreateUserDto } from 'src/application/users/dtos/users.dto';
 import { User } from '../../entities/user.entity';
@@ -15,7 +14,6 @@ const user = new User(input.email);
 
 describe('CreateUserUseCase', () => {
   let createUserUseCase: CreateUserUseCase;
-  let usersRepository: IUsersRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,7 +27,6 @@ describe('CreateUserUseCase', () => {
     }).compile();
 
     createUserUseCase = module.get<CreateUserUseCase>(CreateUserUseCase);
-    usersRepository = module.get<IUsersRepository>('IUsersRepository');
   });
 
   afterEach(() => {

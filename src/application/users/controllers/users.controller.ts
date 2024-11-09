@@ -8,8 +8,6 @@ import {
   Inject,
   Param,
   Post,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../@domain/users/use-cases/create-user.usecase';
 import {

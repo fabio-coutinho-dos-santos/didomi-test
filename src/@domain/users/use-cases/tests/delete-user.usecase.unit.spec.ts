@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IUsersRepository } from '../../repositories/users.repository.interface';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { DeleteUserUseCase } from '../delete-user.usecase';
 import { DeleteUserDto } from 'src/application/users/dtos/delete-user.dto';
@@ -15,7 +14,6 @@ const userStub = new User('valid@gmail.com');
 
 describe('DeleteUserUseCase', () => {
   let deleteUserUseCase: DeleteUserUseCase;
-  let usersRepository: IUsersRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,7 +27,6 @@ describe('DeleteUserUseCase', () => {
     }).compile();
 
     deleteUserUseCase = module.get<DeleteUserUseCase>(DeleteUserUseCase);
-    usersRepository = module.get<IUsersRepository>('IUsersRepository');
   });
 
   afterEach(() => {
