@@ -8,7 +8,7 @@ entity users {
 entity events {
   id (PK): varchar[40]
   user_id (FK): varchar[40]
-  event_name: enum ['email_notifications', 'sms_notifications']
+  name: enum ['email_notifications', 'sms_notifications']
   value: boolean
   created_at: datetime
   updated_at: datetime
@@ -17,7 +17,7 @@ entity events {
 entity events_history {
   id (PK): varchar[40]
   user_id (FK): varchar[40]
-  event_name: enum ['email_notifications', 'sms_notifications']
+  name: enum ['email_notifications', 'sms_notifications']
   value: boolean
   created_at: datetime
 }

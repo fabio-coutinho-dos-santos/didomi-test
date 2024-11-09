@@ -2,14 +2,29 @@ POST http://localhost:3000/users
 Content-type: application/json
 
 {
-    "email": "teste@gmail.com"
+    "email": "fdddsddfddmail.com"
 }
+
+###
+GET http://localhost:3000/users
 
 ###
 POST http://localhost:3000/events
 Content-type: application/json
 
 {
-    "name": "email_notifications",
-    "userId": "61951236-b446-426f-8ecd-4284ea3c0775"
+    "user": {
+        "id": "e94dfc3e-fa61-47b9-b8f8-9d8531c2e9fe"
+    },
+    "consents": [{
+        "id": "email_notifications",
+        "enabled": false
+    },{
+        "id": "sms_notifications",
+        "enabled": false
+    }]
 }
+
+###
+
+DELETE http://localhost:3000/users/5cd69ebe-f7ff-4861-9a05-699414f0f403
