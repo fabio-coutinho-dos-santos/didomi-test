@@ -37,7 +37,7 @@ export class CreateEventUseCase {
     await this.storeEvents(user.id, consents);
   }
 
-  private async storeEventsHistory(
+  public async storeEventsHistory(
     userId: string,
     consents: ConsentDto[],
   ): Promise<void> {
@@ -53,7 +53,7 @@ export class CreateEventUseCase {
     );
   }
 
-  private async storeEvents(
+  public async storeEvents(
     userId: string,
     consents: ConsentDto[],
   ): Promise<void> {
