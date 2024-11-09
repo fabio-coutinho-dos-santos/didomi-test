@@ -14,7 +14,7 @@ Content-type: application/json
 
 {
     "user": {
-        "id": "89e63e3b-025c-415c-bd5e-96fd0a0d3040"
+        "id": "e94dfc3e-fa61-47b9-b8f8-9d8531c2e9fe"
     },
     "consents": [{
         "id": "email_notifications",
