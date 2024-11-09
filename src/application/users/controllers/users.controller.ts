@@ -15,8 +15,8 @@ import {
   UsersPresenter,
 } from '../presenters/create-user.presenter';
 import { CreateUserDto } from '../dtos/users.dto';
-import { GetAllUsersUseCase } from 'src/@domain/users/use-cases/get-all-users.usecase';
-import { DeleteUserUseCase } from 'src/@domain/users/use-cases/delete-user.usecase';
+import { GetAllUsersUseCase } from '../../../@domain/users/use-cases/get-all-users.usecase';
+import { DeleteUserUseCase } from '../../../@domain/users/use-cases/delete-user.usecase';
 import { DeleteUserDto } from '../dtos/delete-user.dto';
 
 @Controller('users')

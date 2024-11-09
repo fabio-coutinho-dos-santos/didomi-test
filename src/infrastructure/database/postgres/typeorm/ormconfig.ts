@@ -13,7 +13,7 @@ export function ormConfig(): any {
     return {
       type: 'postgres',
       url: configService.get<string>('DB_TEST_URL_CONNECTION'),
-      synchronize: false,
+      synchronize: true,
       logging: false,
       entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
