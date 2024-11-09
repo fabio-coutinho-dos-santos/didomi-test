@@ -13,8 +13,7 @@ servers:
     description: "Local Server"
 
 paths:
-  # /api/v1/users:
-  /users:
+  /api/v1/users:
     get:
       tags:
         - Users
@@ -63,7 +62,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ExceptionResponse"
 
-  /users/{id}:
+  /api/v1/users/{id}:
     delete:
       tags:
         - Users
@@ -91,7 +90,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ExceptionResponse"
-  /events:
+  /api/v1/events:
     post:
       tags:
         - Events

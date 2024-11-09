@@ -114,7 +114,9 @@ describe('EventsController Routes', () => {
 
     describe('with valid input format', () => {
       it('should return 201 and must be save the event in events_history table', async () => {
-        const user = await usersRepository.save({ email: 'valid@gmail.com' });
+        const user = await usersRepository.save({
+          email: 'valid.email@gmail.com',
+        });
         const userId = user.id;
 
         const createEventBody: CreateEventDto = {
