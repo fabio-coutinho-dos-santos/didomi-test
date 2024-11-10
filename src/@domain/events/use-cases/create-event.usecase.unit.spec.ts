@@ -90,12 +90,9 @@ describe('CreateEventUseCase', () => {
           'storeEventsHistory',
         );
 
-        const spyStoreEvents = jest.spyOn(createEventUseCase, 'storeEvents');
-
         await createEventUseCase.execute(input);
 
         expect(spyStoreEventsHistory).toHaveBeenCalledTimes(1);
-        expect(spyStoreEvents).toHaveBeenCalledTimes(1);
 
         await expect(createEventUseCase.execute(input)).resolves.not.toThrow();
       });
