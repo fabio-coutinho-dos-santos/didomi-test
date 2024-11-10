@@ -1,21 +1,49 @@
-FROM node:20-alpine AS build
+FROM node:20-alpine as builder
 
-WORKDIR /app
+ENV NODE_ENV build
 
-COPY . .
+WORKDIR /home/node
 
-RUN npm install
+COPY . /home/node
 
-RUN npm run build
+RUN npm ci \
+    && npm run build \
+    && npm prune --production
 
-FROM node:20-alpine AS runner
+# ---
 
-WORKDIR /app
+FROM node:20-alpine
 
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package*.json ./
+ENV NODE_ENV production
 
-EXPOSE 3000
+USER node
+WORKDIR /home/node
 
-CMD node dist/src/main.js
+COPY --from=builder /home/node/package*.json /home/node/
+COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
+COPY --from=builder /home/node/dist/ /home/node/dist/
+
+CMD ["node", "dist/src/main.js"]
+
+# FROM node:20-alpine AS build
+
+# WORKDIR /app
+
+# COPY . .
+
+# RUN npm install
+
+# RUN npm run build
+
+# FROM node:20-alpine AS runner
+
+# WORKDIR /app
+
+# COPY --from=build /app/dist ./dist
+# COPY --from=build /app/node_modules ./node_modules
+# COPY --from=build /app/package*.json ./
+
+# EXPOSE 3000
+
+# CMD node dist/src/main.js
+
