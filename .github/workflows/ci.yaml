@@ -44,4 +44,4 @@ jobs:
         env:
           NODE_ENV: test
           DB_URL_TEST_CONNECTION: ${{ secrets.DB_URL_TEST_CONNECTION }}
-        run: npm run migration:run && npm run test e2e
+        run: npm run test e2e
