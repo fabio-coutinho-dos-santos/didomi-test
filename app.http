@@ -1,20 +1,23 @@
-POST http://localhost:3000/users
+POST http://localhost:3000/api/v1/users
 Content-type: application/json
 
 {
-    "email": "fdddsddfddmail.com"
+    "email": "valid3@gmail.com"
 }
 
 ###
-GET http://localhost:3000/users
+GET http://localhost:3000/api/v1/users/7c4433a1-b1b2-4392-bca4-126fbaa0beec
 
 ###
-POST http://localhost:3000/events
+GET http://localhost:3000/api/v1/users
+
+###
+POST http://localhost:3000/api/v1/events
 Content-type: application/json
 
 {
     "user": {
-        "id": "e94dfc3e-fa61-47b9-b8f8-9d8531c2e9fe"
+        "id": "a771ee8f-3c6e-4da8-ab6f-bd212361a755"
     },
     "consents": [{
         "id": "email_notifications",
