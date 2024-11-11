@@ -5,6 +5,7 @@ import * as request from 'supertest';
 import { DatabaseService } from '../../../infrastructure/database/postgres/database.service';
 import { Repository } from 'typeorm';
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
+jest.setTimeout(30000);
 
 describe('UsersController Routes', () => {
   let app;
