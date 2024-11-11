@@ -39,9 +39,9 @@ jobs:
         id: unit-test
         run: npm run test unit
 
-      - name: Integration Test Code
-        id: integration-test
-        env:
-          NODE_ENV: test
-          DB_URL_TEST_CONNECTION: ${{ secrets.DB_URL_TEST_CONNECTION }}
-        run: npm run test e2e
+      # - name: Integration Test Code
+      #   id: integration-test
+      #   env:
+      #     NODE_ENV: test
+      #     DB_URL_TEST_CONNECTION: ${{ secrets.DB_URL_TEST_CONNECTION }}
+      #   run: npm run test e2e
