@@ -1,0 +1,52 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+AddRelTag("dashed", $lineStyle = DashedLine())
+AddElementTag("users", $bgColor="#890B07", $fontColor="white")
+AddElementTag("database", $bgColor="#0E6655", $fontColor="white")
+AddElementTag("asg", $bgColor="#229954", $fontColor="white")
+AddElementTag("elb", $bgColor="#BB8E3A", $fontColor="white")
+AddElementTag("queue", $bgColor="#17A589 ", $fontColor="black")
+AddElementTag("docker", $shape=EightSidedShape(), $bgColor="#34495E", $fontColor="white", $legendText="micro service\neight sided")
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/node_js.puml
+
+Title "Didomi - Context Diagram - V2"
+
+Person(user, "User", $sprite="users", $tags="users")
+
+Component(front, "Web", "Front End", "Front End")
+
+Boundary(api_gateway_boundary, "API Gateway") {
+  Component(api_gateway, "API Gateway | ELB", "API Gateway | ELB", $tags="elb")
+}
+
+Boundary(services, "Services", "k8s, cloud run, lambda, ec2, ecs, fargate, ...") {
+
+  Component(didomi_api, "Didomi Api", "Microsservice", $sprite="node_js", $tags="docker")
+  Component(audit_api, "Audit Api", "Microsservice", $sprite="node_js", $tags="docker")
+
+}
+
+Boundary(services, "Data"){
+  Boundary(databases, "Data") {
+    ComponentDb(postgres, "Postgres", "App-Database", "Postgres DB", $tags="database")
+    ComponentDb(audi_db, "Postgres", "Audit-Database", "Postgres DB", $tags="database")
+  }
+}
+
+Rel(user, front, "Uses", "HTTP")
+Rel(front, api_gateway, "Uses", "HTTP")
+Rel(api_gateway, didomi_api, "Uses", "HTTP")
+Rel(api_gateway, audit_api, "Uses", "HTTP")
+Rel(didomi_api, postgres, "Uses", "TypeORM")
+Rel(audit_api, audi_db, "Uses", "TypeORM")
+Rel_R(didomi_api, audit_api, "Uses", "Kafka, RabbitMq, SQS, Pubsub ...", $tags="dashed")
+
+
+@enduml

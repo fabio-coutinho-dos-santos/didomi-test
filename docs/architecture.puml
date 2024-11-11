@@ -1,0 +1,37 @@
+@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+AddRelTag("dashed", $lineStyle = DashedLine())
+AddElementTag("users", $bgColor="#890B07", $fontColor="white")
+AddElementTag("database", $bgColor="#0E6655", $fontColor="white")
+AddElementTag("docker", $shape=EightSidedShape(), $bgColor="#34495E", $fontColor="white", $legendText="micro service\neight sided")
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+!include FONTAWESOME/users.puml
+!include FONTAWESOME/node_js.puml
+
+Title "Didomi - Context Diagram V1"
+
+Person(user, "User", $sprite="users", $tags="users")
+
+Component(front, "Web", "Front End", "Front End")
+
+
+  Boundary(microsservices, "GCP Cloud Run") {
+    Component(didomi_app, "Didomi Api", "Didomi Api", "Didomi Api", $sprite="node_js", $tags="docker")
+  }
+
+
+  Boundary(databases, "Data") {
+    ComponentDb(postgres, "Postgres", "Database", "Postgres DB", $tags="database")
+  }
+
+Rel(user, front, "Uses", "HTTP")
+Rel(front, didomi_app, "Uses", "HTTP")
+Rel(didomi_app, postgres, "Uses", "TypeORM")
+
+
+@enduml
