@@ -27,6 +27,7 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix(apiPrefix);
+  console.log('DATABASE', process.env.DB_URL_TEST_CONNECTION);
 
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
