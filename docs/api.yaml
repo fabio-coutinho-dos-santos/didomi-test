@@ -7,8 +7,8 @@ info:
     email: "fabio.santcou@gmail.com"
     url: "https://portfolio-inky-six-97.vercel.app/"
 servers:
-  # - url: "https://test-verx-api.onrender.com/"
-  #   description: "Production Server"
+  - url: "https://didomi-app-test-370724019807.us-central1.run.app/"
+    description: "Production Server"
   - url: "http://localhost:3000"
     description: "Local Server"
 
@@ -63,6 +63,37 @@ paths:
                 $ref: "#/components/schemas/ExceptionResponse"
 
   /api/v1/users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get an user
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionResponse"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExceptionResponse"
     delete:
       tags:
         - Users
@@ -145,7 +176,7 @@ components:
             properties:
               id:
                 type: string
-                format: uuid
+                enum: ["email_notifications", "sms_notifications"]
               enabled:
                 type: boolean
     Consents:
