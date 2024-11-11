@@ -17,6 +17,7 @@ export function ormConfig(): any {
       logging: false,
       entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
+      connectionTimeout: 20000,
     };
   } else {
     return {
@@ -26,6 +27,7 @@ export function ormConfig(): any {
       logging: false,
       entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
+      connectionTimeout: 20000,
     };
   }
 }
