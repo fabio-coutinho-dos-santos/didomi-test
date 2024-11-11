@@ -10,7 +10,9 @@ import { EventsSchema } from '../../../infrastructure/database/postgres/typeorm/
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { EventsHistorySchema } from '../../../infrastructure/database/postgres/typeorm/schemas/events-history.schema';
-jest.setTimeout(30000);
+import 'dotenv/config';
+
+jest.setTimeout(15000);
 
 describe('EventsController Routes', () => {
   let app;
@@ -22,6 +24,7 @@ describe('EventsController Routes', () => {
   const uuid = '61951236-b446-426f-8ecd-4284ea3c0775';
 
   beforeEach(async () => {
+    console.log(process.env.DB_URL_TEST_CONNECTION);
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
     }).compile();
