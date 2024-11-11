@@ -51,7 +51,6 @@ describe('GetUserById', () => {
 
     describe('when users does not exists', () => {
       it('should return an exception', async () => {
-        const user = new User('valid@gmail.com');
         mockUsersRepository.findWithRelations.mockResolvedValue(null);
         await expect(
           getUserByIdUseCase.execute(getUserByIdDto),

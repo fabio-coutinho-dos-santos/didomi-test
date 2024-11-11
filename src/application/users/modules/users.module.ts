@@ -1,4 +1,4 @@
-import { Get, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UsersController } from '../controllers/users.controller';
 import { UsersRepository } from '../../../infrastructure/database/postgres/typeorm/repositories/users.repository';
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
