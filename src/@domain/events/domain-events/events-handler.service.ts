@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { IEventsRepository } from '../repositories/events.repository.interface';
 import { OnEvent } from '@nestjs/event-emitter';
 import { DomainEventsNames } from '../enums/events.enums';
-import { EventCreated } from '../domain-events/event-created-event';
+import { EventCreated } from './event-created-event';
 
 @Injectable()
 export class EventsHandlerService {

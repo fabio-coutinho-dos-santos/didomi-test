@@ -17,7 +17,6 @@ export function ormConfig(): any {
       logging: false,
       entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
-      timezone: 'Z',
     };
   } else {
     return {
@@ -27,7 +26,6 @@ export function ormConfig(): any {
       logging: false,
       entities: [UsersSchema, EventsSchema, EventsHistorySchema],
       migrations: ['dist/migrations/*.js'],
-      timezone: 'Z',
     };
   }
 }
