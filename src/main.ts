@@ -17,10 +17,14 @@ async function bootstrap() {
 
   const swaggerDocument = yaml.parse(fs.readFileSync(swaggerFilePath, 'utf8'));
 
-  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
   const apiVersion = configService.get<string>('API_VERSION') || 'v1';
   const apiPrefix = `api/${apiVersion}`;
+
+  app.use(
+    `/${apiPrefix}/doc`,
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument),
+  );
 
   app.setGlobalPrefix(apiPrefix);
 

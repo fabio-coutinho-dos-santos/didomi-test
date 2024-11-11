@@ -7,6 +7,7 @@ import { UsersModule } from '../../../application/users/modules/users.module';
 import { CreateEventUseCase } from '../../../@domain/events/use-cases/create-event.usecase';
 import { EventsHistoryRepository } from '../../../infrastructure/database/postgres/typeorm/repositories/events-history.repository';
 import { EventsHistorySchema } from '../../../infrastructure/database/postgres/typeorm/schemas/events-history.schema';
+import { EventsHandlerService } from '../../../@domain/events/domain-events/events-handler.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EventsHistorySchema } from '../../../infrastructure/database/postgres/t
   controllers: [EventsController],
   providers: [
     CreateEventUseCase,
+    EventsHandlerService,
     {
       provide: 'IEventsRepository',
       useClass: EventsRepository,

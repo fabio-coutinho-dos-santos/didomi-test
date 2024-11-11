@@ -5,6 +5,7 @@ import { CreateEventDto } from '../../../application/events/dtos/create-event.dt
 import { EventsNames } from '../enums/events.enums';
 import { User } from '../../../@domain/users/entities/user.entity';
 import { Event } from '../entities/event.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 const mockUsersRepository = {
   findByField: jest.fn(),
@@ -43,13 +44,10 @@ describe('CreateEventUseCase', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CreateEventUseCase,
+        EventEmitter2,
         {
           provide: 'IUsersRepository',
           useValue: mockUsersRepository,
-        },
-        {
-          provide: 'IEventsRepository',
-          useValue: mockEventsRepository,
         },
         {
           provide: 'IEventsHistoryRepository',
@@ -90,12 +88,9 @@ describe('CreateEventUseCase', () => {
           'storeEventsHistory',
         );
 
-        const spyStoreEvents = jest.spyOn(createEventUseCase, 'storeEvents');
-
         await createEventUseCase.execute(input);
 
         expect(spyStoreEventsHistory).toHaveBeenCalledTimes(1);
-        expect(spyStoreEvents).toHaveBeenCalledTimes(1);
 
         await expect(createEventUseCase.execute(input)).resolves.not.toThrow();
       });

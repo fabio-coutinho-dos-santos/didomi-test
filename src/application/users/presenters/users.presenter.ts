@@ -26,3 +26,18 @@ export class UsersPresenter {
     });
   }
 }
+
+export class UserPresenter {
+  static toResponse(user: User) {
+    return {
+      id: user.id,
+      email: user.email,
+      consents: user.events.map((event) => {
+        return {
+          id: event.name,
+          enabled: event.enabled,
+        };
+      }),
+    };
+  }
+}

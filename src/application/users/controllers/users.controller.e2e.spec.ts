@@ -100,4 +100,25 @@ describe('UsersController Routes', () => {
       });
     });
   });
+
+  describe('GET /users/{id}', () => {
+    describe('with user id that exists', () => {
+      it('should return 200', async () => {
+        const user = await repository.save({ email: validEmail });
+        const userId = user.id;
+
+        await request(httpServer).get(`/users/${userId}`).expect(HttpStatus.OK);
+      });
+    });
+
+    describe('with user id that does not exists', () => {
+      it('should return 422', async () => {
+        const uuid = '61951236-b446-426f-8ecd-4284ea3c0775';
+
+        await request(httpServer)
+          .delete(`/users/${uuid}`)
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+      });
+    });
+  });
 });
