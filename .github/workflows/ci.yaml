@@ -43,5 +43,5 @@ jobs:
         id: integration-test
         env:
           NODE_ENV: test
-          POSTGRES_TEST_URL_CONNECTION: ${{ env.DB_URL_TEST_CONNECTION }}
+          POSTGRES_TEST_URL_CONNECTION: ${{ vars.DB_URL_TEST_CONNECTION }}
         run: npm run migration:run && npm run test e2e
