@@ -15,7 +15,7 @@ export class GetUserByIdUseCase {
 
   async execute(input: GetUserByIdDto): Promise<User> {
     const { id } = input;
-    const user = await this.usersRepository.findWithRelations({
+    const user = await this.usersRepository.findOneWithRelations({
       where: { id: id },
       relations: {
         events: true,
@@ -25,6 +25,6 @@ export class GetUserByIdUseCase {
       Logger.error('User not found', GetUserByIdUseCase.name);
       throw new UnprocessableEntityException('User not found');
     }
-    return user[0];
+    return user;
   }
 }

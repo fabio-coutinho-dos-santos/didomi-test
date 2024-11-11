@@ -3,6 +3,7 @@
 /node_modules
 /build
 observations.txt
+cd/k8s/secrets-prod.yaml
 
 # Logs
 logs

@@ -6,7 +6,7 @@ Content-type: application/json
 }
 
 ###
-GET http://localhost:3000/api/v1/users/7c4433a1-b1b2-4392-bca4-126fbaa0beec
+GET http://localhost:3000/api/v1/users/b8484334-156c-4330-b1f0-0fc1b294b06e
 
 ###
 GET http://localhost:3000/api/v1/users
@@ -17,7 +17,7 @@ Content-type: application/json
 
 {
     "user": {
-        "id": "7c4433a1-b1b2-4392-bca4-126fbaa0beec"
+        "id": "b8484334-156c-4330-b1f0-0fc1b294b06e"
     },
     "consents": [{
         "id": "email_notifications",
