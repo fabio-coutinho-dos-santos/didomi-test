@@ -16,10 +16,10 @@ export class UsersSchema {
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   email: string;
 
-  @CreateDateColumn({ default: 'now()' })
+  @CreateDateColumn()
   created_at: Date;
 
-  @UpdateDateColumn({ default: 'now()' })
+  @UpdateDateColumn()
   updated_at: Date;
 
   @OneToMany(() => EventsSchema, (event) => event.user, { onDelete: 'CASCADE' })

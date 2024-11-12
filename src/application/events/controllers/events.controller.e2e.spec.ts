@@ -10,6 +10,9 @@ import { EventsSchema } from '../../../infrastructure/database/postgres/typeorm/
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { EventsHistorySchema } from '../../../infrastructure/database/postgres/typeorm/schemas/events-history.schema';
+import 'dotenv/config';
+
+jest.setTimeout(15000);
 
 describe('EventsController Routes', () => {
   let app;

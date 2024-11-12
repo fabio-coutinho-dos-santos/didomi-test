@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  InternalServerErrorException,
+  Post,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateEventDto } from '../dtos/create-event.dto';
 import { CreateEventUseCase } from '../../../@domain/events/use-cases/create-event.usecase';
 
@@ -9,7 +16,15 @@ export class EventsController {
 
   @Post('')
   // @UseFilters(ExceptionsFilter)
-  async createEvent(@Body() input: CreateEventDto): Promise<any> {
-    await this.createEventUseCase.execute(input);
+  async createEvent(@Body() input: CreateEventDto): Promise<void> {
+    try {
+      await this.createEventUseCase.execute(input);
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Internal server error');
+      }
+    }
   }
 }

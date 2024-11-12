@@ -20,7 +20,7 @@ export class EventsHistorySchema {
   name: string;
 
   @Column({ type: 'boolean', nullable: false })
-  enabled: string;
+  enabled: boolean;
 
   @CreateDateColumn()
   created_at: Date;

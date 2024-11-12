@@ -5,6 +5,7 @@ import * as request from 'supertest';
 import { DatabaseService } from '../../../infrastructure/database/postgres/database.service';
 import { Repository } from 'typeorm';
 import { UsersSchema } from '../../../infrastructure/database/postgres/typeorm/schemas/users.schema';
+jest.setTimeout(15000);
 
 describe('UsersController Routes', () => {
   let app;
@@ -87,6 +88,27 @@ describe('UsersController Routes', () => {
         await request(httpServer)
           .delete(`/users/${userId}`)
           .expect(HttpStatus.NO_CONTENT);
+      });
+    });
+
+    describe('with user id that does not exists', () => {
+      it('should return 422', async () => {
+        const uuid = '61951236-b446-426f-8ecd-4284ea3c0775';
+
+        await request(httpServer)
+          .delete(`/users/${uuid}`)
+          .expect(HttpStatus.UNPROCESSABLE_ENTITY);
+      });
+    });
+  });
+
+  describe('GET /users/{id}', () => {
+    describe('with user id that exists', () => {
+      it('should return 200', async () => {
+        const user = await repository.save({ email: validEmail });
+        const userId = user.id;
+
+        await request(httpServer).get(`/users/${userId}`).expect(HttpStatus.OK);
       });
     });
 
