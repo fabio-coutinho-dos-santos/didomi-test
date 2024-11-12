@@ -3,6 +3,8 @@ import { WINSTON_MODULE_NEST_PROVIDER, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import 'dotenv/config';
 
+// Used for send logs to Datadog
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const httpTransport = new winston.transports.Http({
   level: 'info',
   format: winston.format.json(),
@@ -11,6 +13,8 @@ const httpTransport = new winston.transports.Http({
   ssl: true,
 });
 
+// Used for logging to a file
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fileTransport = new winston.transports.File({
   filename: 'application.log',
   format: winston.format.combine(
