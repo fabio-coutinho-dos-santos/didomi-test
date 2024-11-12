@@ -1,73 +1,97 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# API-RESTful
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Api RESTful desenvolvida para o cadastro de produtores rurais e suas fazendas como teste técnico para desenvolvedor back end na VERX.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Principais elementos utilizados no desenvolvimento
 
-## Description
+- node v20.9.0
+- express
+- typescript
+- postgres
+- typeORM
+- jest
+- supertest
+- eslint
+- swagger
+- docker
+- docker compose
+- kubernetes
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Principais design patterns adotados
 
-## Installation
+- Clean Code
+- Single Responsability Principle (SRP)
+- Don't repeat yourself (DRY)
+- Keep it simple, stupid (KISS),
+- You aren't gonna need it (YAGNY)
+- Repository
+- Dependency Injection
+- Dependency Inversion
+- Interface Segregation
 
-```bash
-$ npm install
-```
+## Arquitetura
 
-## Running the app
+Toda a construção da api assim como a hierarquia de pastas foram definidos aplicando práticas de modelagem do Domain Driven Design (DDD) em conjunto com Clean Architecture. Dessa forma, a arquitetura proteje as regras de negócio, com as entidades referentes ao dominio principal da aplicação no nucleo, matendo as partes agregadas ao negócio nas extremidades da arquitetura, como sugerem as arquiteturas limpa e hexagonal.
 
-```bash
-# development
-$ npm run start
+Como parte das práticas do DDD, destaca-se a criação das entidades de domínio contendo suas respectivas validações oriundas das regras de negócio, assim como a construção de value objects quando se fez necessário. Além disso, toda a estrutura da hierarquia de pastas adotada mantendo uma linguagem ubiqua.
 
-# watch mode
-$ npm run start:dev
+Por outro lado, destaca-se como práticas referentes a arquitetura limpa a criação de camadas anticorrupção entre os elementos de dominio e as partes agregadas da aplicação, possibilitando tanto a injeçao de dependências quanto a inversão dessas dependencias, tornando o código mais desacoplado.
 
-# production mode
-$ npm run start:prod
-```
+Além disso, também foi utilizado arquitetura orientada a eventos em uma das features implementadas.
 
-## Test
+## Descrição
 
-```bash
-# unit tests
-$ npm run test
+A Api elaborada possui duas entidades de domínio, Users e Events.
+Como convensão para escopo do desenvolvimento do teste foi definido que um Users pode ter várias Events, contudo um Event pode pertencer apenas a um User.
 
-# e2e tests
-$ npm run test:e2e
+Alé disso há tabela, events_history, que grava todos os eventos registrados para um usuário. Assim a tabela de events registra apenas os eventos mais recentes do usuário, mantendo apenas o status atual dos eventos para aquele usuário.
 
-# test coverage
-$ npm run test:cov
-```
+Para realizar as tarefas de CRUD destas entidades e suas respectivas regras de negócio elas foram modeladas para o Banco de dados postgres da seguinte forma:
 
-## Support
+- Tabelas:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  ![Alt text](docs/database/image.png)
 
-## Stay in touch
+Para realizar a atualização do status na tabela de events, foi utilizado o conceito de arquitetura orientada a eventos. Assim, quando um evento chega pelo controller, dentro do use case ele é gravado da tabela de events_history e em seguida é disparado um evento. Este evento é capturado e então é feita a atualização na tabela de events do status do consentimento do usuário.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+O nível de maturidade adotado para elaboração da API foi o 2, já tornando-a RESTful e combinando o verbos HTTP com seus respectivos significados semânticos, assim como utilizando de forma expressiva os recursos a ações a serem executadas nas rotas da aplicação.
 
-## License
+Todo o desenvolvimento foi guiado por testes em que foram elaborados testes automatizados de unidade para os pontos mais críticos da aplicação. Além disso, também foram desenvolvidos testes de integração para todas as rotas da aplicação, para o qual foi utilizado ou outro banco de dados exclusivo para testes.
 
-Nest is [MIT licensed](LICENSE).
+- Cobertura de Testes da aplicação
+
+![Alt text](docs/assets/test-coverage.png)
+
+## Detalhes de implementação
+
+- Altíssima cobertura de testes. Para verificar basta executar o comando **npm run test:cov** após configurar o projeto localmente.
+- Utilizalção de git flow e conventional commits.
+- Utilização de arquitetura orientada a eventos.
+- Utilização de logs estruturados em formato JSON para facilitar o scrap de ferramentas de observabilidade
+
+### Devido ao escopo ser uma aplicação de teste não foram adotadas:
+
+- Instrumentação de métricas, traces e logs para observabilidade
+- Criaçao/Alteração das tabelas por meio de migrations. (**_Foi utilizado o atributo syncronize do TypeORM com true, o que não deve ser feito em produção_**)
+
+## Ci-Cd
+
+- Como prática de Devops abrangendo construções e entregas contínuas, para escopo deste teste foi criado um pipeline de ci com github actions que realiza o build do projeto, executa a ferramenta de lint para conferência de errors estáticos do código e também executa os testes unitário da aplicação.
+
+- Por outro lado, como entrega contínua, a aplicação é implantada no serviço Cloud Run do GCP que é vinculado ao repositório do projeto e, quando ocorre uma atualização no branch main é construída uma nova versão a partir da imagem docker, descrita no Dockerfile e, essa nova versão já fica disponível em produção.
+
+- Para proteção do deploy utilizando essa estratégia basta configurar o repositório no github para não aceitar push diretamente no branch main, sendo que isso śo poderá ocorrer via aprovação de PR e, também configurar que a PR só porderá ser aprovada após a execução do pipeline. Por questões de agilidade, e por se tratar de uma aplicação com escopo de teste, não foram aplicadas essas configurações
+
+- Outra estratégia, que não foi adotada devido a envolver custos e escopo, é a integração do pipeline de ci com o sonarqube onde podem ser inferidas regras para barrar códigos mal escritos e com baixa porcentagem de cobertura de testes.
+
+- Para execução da aplicação são necessários 2 bancos de dados, um para os dados da aplicação e o outro para a execução dos testes de integração. Localmente o arquivo docker compose já constrói esses dois bancos, entretando para produção apenas o banco da aplicação foi criado em um seviço do provedor Render.
+
+- Foi elaborado também os arquivo de deployment.yaml, secrets.yaml e service.yamol para que e aplicação seja implantada em um cluster kubernetes apenas configurando as variáveis de ambiente corretamente.
+
+- **OBS**: A escolha de hospedagem da aplicação no GCP e do banco de dados no provedor Render foi devido a ter a disponibilidade destes recursos de forma gŕatis com algumas limitações, mas sendo suficiente para testar a aplicação em um ambiente de produção e serverless. Outras estratégias poderiam ser utilizadas aqui, como construção das pipelines de Ci diretamente nos cloud providers via Code Pipeline (AWS) ou Cloud Build (GCP), combinando estratégias de contrução da imagem docker e gravação desta no artifact registry (GCP) ou ECR (AWS) e posterior implantação como serverless no Cloud Run(GCP) ou Fargate(AWS). Estas estratégias assim como outras possíveis não foram adotadas pois envolvem custos.
+
+## Documentação OpenApi
+
+- Foi elaborado a documentação da api em formato OpenApi que está contido em docs/api.yaml. Neste arquivo estão descritas todas as rotas da aplicação.
+
+- Para visualizar essa documentação assim como executar as requisições, foi utilizado o swagger podendo ser configurado para executar as requisições tanto no ambiente local, quanto em produção.
