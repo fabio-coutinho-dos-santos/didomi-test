@@ -29,7 +29,7 @@ Api RESTful desenvolvida para o cadastro de produtores rurais e suas fazendas co
 - Dependency Inversion
 - Interface Segregation
 
-## Arquitetura
+## Arquitetura e Design do código
 
 Toda a construção da api assim como a hierarquia de pastas foram definidos aplicando práticas de modelagem do Domain Driven Design (DDD) em conjunto com Clean Architecture. Dessa forma, a arquitetura proteje as regras de negócio, com as entidades referentes ao dominio principal da aplicação no nucleo, matendo as partes agregadas ao negócio nas extremidades da arquitetura, como sugerem as arquiteturas limpa e hexagonal.
 
@@ -71,8 +71,8 @@ Todo o desenvolvimento foi guiado por testes em que foram elaborados testes auto
 
 ### Devido ao escopo ser uma aplicação de teste não foram adotadas:
 
-- Instrumentação de métricas, traces e logs para observabilidade
-- Criaçao/Alteração das tabelas por meio de migrations. (**_Foi utilizado o atributo syncronize do TypeORM com true, o que não deve ser feito em produção_**)
+- Instrumentação de métricas, traces e logs para observabilidade.
+- Esteira completa de ci-cd para deploy da aplicação em produção.
 
 ## Ci-Cd
 
@@ -90,8 +90,79 @@ Todo o desenvolvimento foi guiado por testes em que foram elaborados testes auto
 
 - **OBS**: A escolha de hospedagem da aplicação no GCP e do banco de dados no provedor Render foi devido a ter a disponibilidade destes recursos de forma gŕatis com algumas limitações, mas sendo suficiente para testar a aplicação em um ambiente de produção e serverless. Outras estratégias poderiam ser utilizadas aqui, como construção das pipelines de Ci diretamente nos cloud providers via Code Pipeline (AWS) ou Cloud Build (GCP), combinando estratégias de contrução da imagem docker e gravação desta no artifact registry (GCP) ou ECR (AWS) e posterior implantação como serverless no Cloud Run(GCP) ou Fargate(AWS). Estas estratégias assim como outras possíveis não foram adotadas pois envolvem custos.
 
-## Documentação OpenApi
+## Documentação OpenApi e Aplicação de produção
+
+- Url de prdução no serviço do Cloud Run do GCP = https://didomi-app-test-370724019807.us-central1.run.app
 
 - Foi elaborado a documentação da api em formato OpenApi que está contido em docs/api.yaml. Neste arquivo estão descritas todas as rotas da aplicação.
 
 - Para visualizar essa documentação assim como executar as requisições, foi utilizado o swagger podendo ser configurado para executar as requisições tanto no ambiente local, quanto em produção.
+
+- A documentação swagger está disponível em: [https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/](https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/)
+
+## Arquitetura aplicada
+
+![Alt text](docs/architecture/v1.png)
+
+## Melhorias arquiteturais
+
+- Pensando que poderia haver a necessidade de escalar esta aplicação algumas melhorias arquiteturais poderiam ser adotadas visando aspectos como escalabilidade, elasticidade, disponibilidade e agilidade, são elas:
+
+- Arquitetar o sistema com arquitura de microsserviços com straming de eventos, criando um ms para gerenciamento de usuários e atualização/criação dos consentimentos, mantendo no banco apenas o estado atual dos consentimentos e, o outro, de auditoria para receber requisições que podem ser mais custosas para o sistema para geração de relatório e outras demandas. Assim, seriam 2 microsserviços, com bancos de dados destintos e se comunicando via mensageria utilizando SQS, Kafka, RabbitMQ, PubSub ... etc.
+
+- Deploy automatizado a partir de uma pipeline completa executando os testes unitários e de integração antes além de descrever os recusos computacionais que devem ser alocados para os serviços. Em seguida criação de Load Balancer e Auto Scale Group para permitir que a aplicação escale conforme a carga de requisições. Outra estratégia neste contexto que poderia ser adotada é o deploy em um cluster kubernetes configurando uma HPA adequada para realização de escala horizontal dos pods e adequação da aplicação à carga recebida.
+
+- Como estratégias de autenticação e autorização poderiam ser utilizadas soluções gerenciadas como o Cognito(AWS) ou o Keycloak para serem os servidores de identidade da aplicação.
+
+![Alt text](docs/architecture/v2.png)
+
+## Execução local
+
+### Utilizando docker compose
+
+- Para executar o código localmente utilizando docker compose basta clonar o repositório e seguir os seguintes passos:
+
+  - Criar um arquivo .env na raiz do projeto.
+  - Configurar as seguintes variáveis de ambiente neste arquivo .env:
+  - DB_URL_CONNECTION=postgres://user:password@svc-db:5432/postgres
+  - DB_TEST_URL_CONNECTION=postgres://user:password@svc-db-test:5432/postgres
+  - API_VERSION=v1
+  - PORT=3000
+  - Essas variáveis estão descritas no arquivo env-example.txt
+  - Criar a rede interna do docker para conectar os containers executando o comando: **docker network create didomi-net**
+  - Na raiz do projeto, executar o comando **docker-compose up**
+
+- Seguindo esses passos os container dos bancos de dados e da aplicação serão criados e a aplicação será iniciada automáticamente.
+
+### Utilizando node instalado
+
+Para executar o código localmente basta clonar o repositório e seguir os seguintes passos:
+
+- Criar um arquivo .env na raiz do projeto.
+- Configurar as seguintes variáveis de ambiente neste arquivo .env:
+- POSTGRES_URL_CONNECTION=production-database-url
+- POSTGRES_TEST_URL_CONNECTION=production-database-test-url
+- API_VERSION=v1
+- PORT=3000
+- Na raiz do projeto, executar os comandos:
+- **npm install**
+- **npm run start:dev**
+
+**_OBS_**  Caso tenha o postgres também instalado localmente basta criar dois bancos distintos e configurar as variáveis de ambiente no seguinte padrão:
+
+- postgres://user:password@host:5432/dbName
+
+## Deploy no kubernetes
+
+- Foi elaborado um arquivo de deployment, um de cervice e um de secret para realizar o deploy da aplicação em um cluster kubernetes.
+- Para isso devem ser seguidos os seguintes passos: considerando um ambiente local com kubectl e minikube instalados:
+  - Realizar o build da imagem docker, executando o comando: **docker build -t didomi-app-image .** . Estando na raiz do projeto
+  - Copiar a imagem gerada para o repositório interno de imagens do minikube, executando o comando: **minikube image load didomi-app-image:latest**
+  - Atualizar o arquivo secrets.yaml com as strings de conexão com os bancos de produção convertido para base64
+  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/secrets.yaml**
+  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/service.yaml**
+  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/deployment.yaml**
+  - Após isso pode ser feito um port forward do container dentro do kubernetes para que vc possa fazer requisições para ele utilizando sua rede local, executando o comando:
+    - **kubectl port-forward <service-name> <localPort>:<servicePort>**
+    - Exemplo: **kubectl port-forward didomi-service 3000:3000**
+  - Assim, ao eviar requisições para http://localhost:3000/ vc estará acessando o pod dentro do k8s

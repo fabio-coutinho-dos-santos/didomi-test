@@ -1,0 +1,4 @@
+DB_URL_CONNECTION=postgres://user:password@svc-db:5432/postgres
+DB_TEST_URL_CONNECTION=postgres://user:password@svc-db-test:5432/postgres
+API_VERSION=v1
+PORT=3000
