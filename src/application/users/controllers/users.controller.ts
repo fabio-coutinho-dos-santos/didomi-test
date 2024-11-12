@@ -6,9 +6,10 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
-  Logger,
+  InternalServerErrorException,
   Param,
   Post,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreateUserUseCase } from '../../../@domain/users/use-cases/create-user.usecase';
 import {
@@ -40,14 +41,30 @@ export class UsersController {
 
   @Post('')
   async createUser(@Body() input: CreateUserDto): Promise<CreateUserPresenter> {
-    const user = await this.createUserUseCase.execute(input);
-    return CreateUserPresenter.toResponse(user);
+    try {
+      const user = await this.createUserUseCase.execute(input);
+      return CreateUserPresenter.toResponse(user);
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Internal server error');
+      }
+    }
   }
 
   @Get(':id')
   async getUser(@Param() input: GetUserByIdDto): Promise<UsersPresenter> {
-    const user: User = await this.getUserByIdUseCase.execute(input);
-    return UserPresenter.toResponse(user);
+    try {
+      const user: User = await this.getUserByIdUseCase.execute(input);
+      return UserPresenter.toResponse(user);
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Internal server error');
+      }
+    }
   }
 
   @Get('')
@@ -55,15 +72,26 @@ export class UsersController {
     try {
       const allUsers: User[] = await this.getAllUsersUseCase.execute();
       return UsersPresenter.toResponse(allUsers);
-    } catch (err) {
-      Logger.error(err);
-      throw err;
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Internal server error');
+      }
     }
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteUser(@Param() input: DeleteUserDto): Promise<void> {
-    await this.deleteUserUseCase.execute(input);
+    try {
+      await this.deleteUserUseCase.execute(input);
+    } catch (error) {
+      if (error instanceof UnprocessableEntityException) {
+        throw error;
+      } else {
+        throw new InternalServerErrorException('Internal server error');
+      }
+    }
   }
 }

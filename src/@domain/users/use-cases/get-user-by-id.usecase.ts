@@ -14,17 +14,22 @@ export class GetUserByIdUseCase {
   private readonly usersRepository: IUsersRepository;
 
   async execute(input: GetUserByIdDto): Promise<User> {
-    const { id } = input;
-    const user = await this.usersRepository.findOneWithRelations({
-      where: { id: id },
-      relations: {
-        events: true,
-      },
-    });
-    if (!user) {
-      Logger.error('User not found', GetUserByIdUseCase.name);
-      throw new UnprocessableEntityException('User not found');
+    try {
+      const { id } = input;
+      const user = await this.usersRepository.findOneWithRelations({
+        where: { id: id },
+        relations: {
+          events: true,
+        },
+      });
+      if (!user) {
+        Logger.error('User not found', GetUserByIdUseCase.name);
+        throw new UnprocessableEntityException('User not found');
+      }
+      return user;
+    } catch (error) {
+      Logger.error(`Error getting user by id ${input.id}: ${error.message}`);
+      throw error;
     }
-    return user;
   }
 }

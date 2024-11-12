@@ -4,6 +4,7 @@ import { DatabaseModule } from './infrastructure/database/postgres/database.modu
 import { UsersModule } from './application/users/modules/users.module';
 import { EventsModule } from './application/events/modules/events.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { WinstonLoggerModule } from './infrastructure/logger/winston.loggger.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     UsersModule,
     EventsModule,
     EventEmitterModule.forRoot(),
+    WinstonLoggerModule,
   ],
   controllers: [],
   providers: [],

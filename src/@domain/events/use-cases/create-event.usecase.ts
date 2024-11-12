@@ -1,6 +1,7 @@
 import {
   Inject,
   Injectable,
+  Logger,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import {
@@ -25,16 +26,21 @@ export class CreateEventUseCase {
   @Inject(EventEmitter2)
   private readonly eventEmitter: EventEmitter2;
 
-  async execute(input: CreateEventDto): Promise<any> {
-    const { user, consents } = input;
+  async execute(input: CreateEventDto): Promise<void> {
+    try {
+      const { user, consents } = input;
 
-    const userStored = await this.usersRepository.findByField('id', user.id);
+      const userStored = await this.usersRepository.findByField('id', user.id);
 
-    if (!userStored) {
-      throw new UnprocessableEntityException('User not found');
+      if (!userStored) {
+        throw new UnprocessableEntityException('User not found');
+      }
+
+      await this.storeEventsHistory(user.id, consents);
+    } catch (error) {
+      Logger.error(error);
+      throw error;
     }
-
-    await this.storeEventsHistory(user.id, consents);
   }
 
   public async storeEventsHistory(
