@@ -7,9 +7,10 @@ AddRelTag("dashed", $lineStyle = DashedLine())
 AddElementTag("users", $bgColor="#890B07", $fontColor="white")
 AddElementTag("database", $bgColor="#0E6655", $fontColor="white")
 AddElementTag("asg", $bgColor="#229954", $fontColor="white")
-AddElementTag("elb", $bgColor="#BB8E3A", $fontColor="white")
+AddElementTag("elb", $bgColor="#E64A19", $fontColor="white")
 AddElementTag("queue", $bgColor="#17A589 ", $fontColor="black")
 AddElementTag("docker", $shape=EightSidedShape(), $bgColor="#34495E", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("id-server", $shape=EightSidedShape(), $bgColor="#757575", $fontColor="white", $legendText="micro service\neight sided")
 
 !define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
 !define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
@@ -26,6 +27,8 @@ Boundary(api_gateway_boundary, "API Gateway") {
   Component(api_gateway, "API Gateway | ELB", "API Gateway | ELB", $tags="elb")
 }
 
+Component(id_server, "ID Server", "Auth Server", "Keycloack | Cognito", $tags="id-server")
+
 Boundary(services, "Services", "k8s, cloud run, lambda, ec2, ecs, fargate, ...") {
 
   Component(didomi_api, "Didomi Api", "Microsservice", $sprite="node_js", $tags="docker")
@@ -40,6 +43,8 @@ Boundary(services, "Data"){
   }
 }
 
+Rel_L(api_gateway, id_server, "Uses", "HTTP")
+Rel_U(didomi_api, id_server, "Uses", "HTTP")
 Rel(user, front, "Uses", "HTTP")
 Rel(front, api_gateway, "Uses", "HTTP")
 Rel(api_gateway, didomi_api, "Uses", "HTTP")
