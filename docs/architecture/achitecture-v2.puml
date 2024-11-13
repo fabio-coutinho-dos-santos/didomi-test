@@ -43,7 +43,6 @@ Boundary(services, "Data"){
   }
 }
 
-Rel_L(api_gateway, id_server, "Uses", "HTTP")
 Rel_U(didomi_api, id_server, "Uses", "HTTP")
 Rel(user, front, "Uses", "HTTP")
 Rel(front, api_gateway, "Uses", "HTTP")
