@@ -1,10 +1,11 @@
 # API-RESTful
 
-Api RESTful desenvolvida para o cadastro de produtores rurais e suas fazendas como teste técnico para desenvolvedor back end na VERX.
+RESTful API developed for user registration and consent events as a technical test for a senior backend engineer position at DIDOMI.
 
-## Principais elementos utilizados no desenvolvimento
+## Main elements used in the development
 
 - node v20.9.0
+- nestJs
 - express
 - typescript
 - postgres
@@ -17,152 +18,157 @@ Api RESTful desenvolvida para o cadastro de produtores rurais e suas fazendas co
 - docker compose
 - kubernetes
 
-## Principais design patterns adotados
+## Main design patterns adopted
 
 - Clean Code
-- Single Responsability Principle (SRP)
+- Single Responsibility Principle (SRP)
 - Don't repeat yourself (DRY)
-- Keep it simple, stupid (KISS),
-- You aren't gonna need it (YAGNY)
+- Keep it simple, stupid (KISS)
+- You aren't gonna need it (YAGNI)
 - Repository
 - Dependency Injection
 - Dependency Inversion
 - Interface Segregation
 
-## Arquitetura e Design do código
+## Code Architecture and Design
 
-Toda a construção da api assim como a hierarquia de pastas foram definidos aplicando práticas de modelagem do Domain Driven Design (DDD) em conjunto com Clean Architecture. Dessa forma, a arquitetura proteje as regras de negócio, com as entidades referentes ao dominio principal da aplicação no nucleo, matendo as partes agregadas ao negócio nas extremidades da arquitetura, como sugerem as arquiteturas limpa e hexagonal.
+The API structure and folder hierarchy were defined by applying Domain-Driven Design (DDD) modeling practices along with Clean Architecture. This architecture protects business rules, with entities related to the core domain of the application at the center, keeping business-related parts on the periphery, as Clean and Hexagonal architectures suggest.
 
-Como parte das práticas do DDD, destaca-se a criação das entidades de domínio contendo suas respectivas validações oriundas das regras de negócio, assim como a construção de value objects quando se fez necessário. Além disso, toda a estrutura da hierarquia de pastas adotada mantendo uma linguagem ubiqua.
+As part of DDD practices, domain entities were created with their respective validations from business rules, along with a folder hierarchy that maintains a ubiquitous language.
 
-Por outro lado, destaca-se como práticas referentes a arquitetura limpa a criação de camadas anticorrupção entre os elementos de dominio e as partes agregadas da aplicação, possibilitando tanto a injeçao de dependências quanto a inversão dessas dependencias, tornando o código mais desacoplado.
+From a Clean Architecture perspective, anti-corruption layers were created between domain elements and application components, enabling both dependency injection and inversion, resulting in more decoupled code.
 
-Além disso, também foi utilizado arquitetura orientada a eventos em uma das features implementadas.
+Event-driven architecture was also applied in one of the implemented features.
 
-## Descrição
+## Description
 
-A Api elaborada possui duas entidades de domínio, Users e Events.
-Como convensão para escopo do desenvolvimento do teste foi definido que um Users pode ter várias Events, contudo um Event pode pertencer apenas a um User.
+The API has two domain entities, Users and Events. Following the development scope convention, a User can have multiple Events, but an Event can belong to only one User.
 
-Alé disso há tabela, events_history, que grava todos os eventos registrados para um usuário. Assim a tabela de events registra apenas os eventos mais recentes do usuário, mantendo apenas o status atual dos eventos para aquele usuário.
+Additionally, there is an `events_history` table that logs all events registered for a user. The `events` table only stores the latest events for a user, maintaining only the current status of events for that user.
 
-Para realizar as tarefas de CRUD destas entidades e suas respectivas regras de negócio elas foram modeladas para o Banco de dados postgres da seguinte forma:
+To perform CRUD operations on these entities and their business rules, they were modeled for the PostgreSQL database as follows:
 
-- Tabelas:
+- Tables:
 
   ![Alt text](docs/database/image.png)
 
-Para realizar a atualização do status na tabela de events, foi utilizado o conceito de arquitetura orientada a eventos. Assim, quando um evento chega pelo controller, dentro do use case ele é gravado da tabela de events_history e em seguida é disparado um evento. Este evento é capturado e então é feita a atualização na tabela de events do status do consentimento do usuário.
+To update the status in the `events` table, an event-driven architecture approach was used. When an event arrives via the controller, it is recorded in `events_history` within the use case, and then a domain event is triggered. This domain event is captured to update the user's consent status in the `events` table.
 
-O nível de maturidade adotado para elaboração da API foi o 2, já tornando-a RESTful e combinando o verbos HTTP com seus respectivos significados semânticos, assim como utilizando de forma expressiva os recursos a ações a serem executadas nas rotas da aplicação.
+The API's maturity level follows Level 2, making it RESTful by combining HTTP verbs with their semantic meanings and expressively using resources to execute actions on application routes.
 
-Todo o desenvolvimento foi guiado por testes em que foram elaborados testes automatizados de unidade para os pontos mais críticos da aplicação. Além disso, também foram desenvolvidos testes de integração para todas as rotas da aplicação, para o qual foi utilizado ou outro banco de dados exclusivo para testes.
+All development was guided by tests, including unit tests for critical application points like domain entity validations and use cases, as well as integration tests for all application routes, using a separate database for testing.
 
-- Cobertura de Testes da aplicação
+- Application Test Coverage
 
-![Alt text](docs/assets/test-coverage.png)
+![Alt text](docs/test-coverage.png)
 
-## Detalhes de implementação
+## Implementation Details
 
-- Altíssima cobertura de testes. Para verificar basta executar o comando **npm run test:cov** após configurar o projeto localmente.
-- Utilizalção de git flow e conventional commits.
-- Utilização de arquitetura orientada a eventos.
-- Utilização de logs estruturados em formato JSON para facilitar o scrap de ferramentas de observabilidade
+- High test coverage. To check, run **npm run test:cov** after configuring the project locally.
+- Git flow and conventional commits were used.
+- Clean and event-driven architecture applied.
+- Structured JSON logs for observability tool scraping.
 
-### Devido ao escopo ser uma aplicação de teste não foram adotadas:
+### Due to the scope of this being a test application, the following were not included:
 
-- Instrumentação de métricas, traces e logs para observabilidade.
-- Esteira completa de ci-cd para deploy da aplicação em produção.
+- Instrumentation for metrics, traces, and logs for observability.
+- Full CI-CD pipeline for production deployment.
+- User email verification.
 
-## Ci-Cd
+## CI-CD
 
-- Como prática de Devops abrangendo construções e entregas contínuas, para escopo deste teste foi criado um pipeline de ci com github actions que realiza o build do projeto, executa a ferramenta de lint para conferência de errors estáticos do código e também executa os testes unitário da aplicação.
+- As a DevOps practice covering continuous build and delivery, a CI pipeline using GitHub Actions was created for this test scope. It builds the project, runs a linter for static code error checks, and executes unit tests.
 
-- Por outro lado, como entrega contínua, a aplicação é implantada no serviço Cloud Run do GCP que é vinculado ao repositório do projeto e, quando ocorre uma atualização no branch main é construída uma nova versão a partir da imagem docker, descrita no Dockerfile e, essa nova versão já fica disponível em produção.
+- For continuous delivery, the application is deployed on Google Cloud Platform's Cloud Run, linked to the project repository. When there’s an update in the main branch, a new version is built from the Docker image described in the Dockerfile and deployed to production.
 
-- Para proteção do deploy utilizando essa estratégia basta configurar o repositório no github para não aceitar push diretamente no branch main, sendo que isso śo poderá ocorrer via aprovação de PR e, também configurar que a PR só porderá ser aprovada após a execução do pipeline. Por questões de agilidade, e por se tratar de uma aplicação com escopo de teste, não foram aplicadas essas configurações
+- To protect deployment, configure the GitHub repository to prevent direct pushes to the main branch, allowing only PR approvals after pipeline completion. These configurations were not applied due to time constraints and the test scope.
 
-- Outra estratégia, que não foi adotada devido a envolver custos e escopo, é a integração do pipeline de ci com o sonarqube onde podem ser inferidas regras para barrar códigos mal escritos e com baixa porcentagem de cobertura de testes.
+- Another strategy, which was not adopted due to costs and scope, is integrating the CI pipeline with SonarQube for rules to block poorly written code and low test coverage.
 
-- Para execução da aplicação são necessários 2 bancos de dados, um para os dados da aplicação e o outro para a execução dos testes de integração. Localmente o arquivo docker compose já constrói esses dois bancos, entretando para produção apenas o banco da aplicação foi criado em um seviço do provedor Render.
+- Running the application requires two databases, one for application data and another for integration testing. Locally, the docker compose file creates both databases, while only the application database was created in a provider (Render) for production.
 
-- Foi elaborado também os arquivo de deployment.yaml, secrets.yaml e service.yamol para que e aplicação seja implantada em um cluster kubernetes apenas configurando as variáveis de ambiente corretamente.
+- Deployment.yaml, secrets.yaml, and service.yaml files were created for deploying the application on a Kubernetes cluster with properly configured environment variables.
 
-- **OBS**: A escolha de hospedagem da aplicação no GCP e do banco de dados no provedor Render foi devido a ter a disponibilidade destes recursos de forma gŕatis com algumas limitações, mas sendo suficiente para testar a aplicação em um ambiente de produção e serverless. Outras estratégias poderiam ser utilizadas aqui, como construção das pipelines de Ci diretamente nos cloud providers via Code Pipeline (AWS) ou Cloud Build (GCP), combinando estratégias de contrução da imagem docker e gravação desta no artifact registry (GCP) ou ECR (AWS) e posterior implantação como serverless no Cloud Run(GCP) ou Fargate(AWS). Estas estratégias assim como outras possíveis não foram adotadas pois envolvem custos.
+- **Note**: GCP hosting and Render for the database were chosen for free resources with limitations, enough to test the application in a serverless production environment. Other strategies could be used, such as building CI pipelines in cloud providers (AWS CodePipeline or GCP Cloud Build) with Docker image storage (Artifact Registry or ECR) and subsequent serverless deployment. These strategies were not adopted due to cost constraints.
 
-## Documentação OpenApi e Aplicação de produção
+## OpenAPI Documentation and Production Application
 
-- Url de prdução no serviço do Cloud Run do GCP = https://didomi-app-test-370724019807.us-central1.run.app
+- Production URL on GCP Cloud Run service = https://didomi-app-test-370724019807.us-central1.run.app
 
-- Foi elaborado a documentação da api em formato OpenApi que está contido em docs/api.yaml. Neste arquivo estão descritas todas as rotas da aplicação.
+- OpenAPI documentation is in `docs/api.yaml` describing all application routes.
 
-- Para visualizar essa documentação assim como executar as requisições, foi utilizado o swagger podendo ser configurado para executar as requisições tanto no ambiente local, quanto em produção.
+- To view this documentation and execute requests, Swagger can be configured for both local and production environments.
 
-- A documentação swagger está disponível em: [https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/](https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/)
+- Swagger documentation available at: [https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/](https://didomi-app-test-370724019807.us-central1.run.app/api/v1/doc/)
 
-## Arquitetura aplicada
+## Applied Architecture
+
+- For this technical test with limited time and cost, the simplest architecture fulfilling the requirements was used, as shown below:
 
 ![Alt text](docs/architecture/v1.png)
 
-## Melhorias arquiteturais
+## Architectural Improvements
 
-- Pensando que poderia haver a necessidade de escalar esta aplicação algumas melhorias arquiteturais poderiam ser adotadas visando aspectos como escalabilidade, elasticidade, disponibilidade e agilidade, são elas:
+- If this application needed to scale, architectural improvements could include:
 
-- Arquitetar o sistema com arquitura de microsserviços com straming de eventos, criando um ms para gerenciamento de usuários e atualização/criação dos consentimentos, mantendo no banco apenas o estado atual dos consentimentos e, o outro, de auditoria para receber requisições que podem ser mais custosas para o sistema para geração de relatório e outras demandas. Assim, seriam 2 microsserviços, com bancos de dados destintos e se comunicando via mensageria utilizando SQS, Kafka, RabbitMQ, PubSub ... etc.
+- Adopting a microservices architecture with event streaming, creating one microservice for user and consent management and another for auditing, maintaining only the current state of consents in the database and processing requests for reports and other demands in the audit service. These two microservices would communicate via messaging (SQS, Kafka, RabbitMQ, PubSub, etc.).
 
-- Deploy automatizado a partir de uma pipeline completa executando os testes unitários e de integração antes além de descrever os recusos computacionais que devem ser alocados para os serviços. Em seguida criação de Load Balancer e Auto Scale Group para permitir que a aplicação escale conforme a carga de requisições. Outra estratégia neste contexto que poderia ser adotada é o deploy em um cluster kubernetes configurando uma HPA adequada para realização de escala horizontal dos pods e adequação da aplicação à carga recebida.
+- Automated deployment:
+   - CI Pipeline: Run lint, unit, and integration tests, build the Docker image, and store it in a registry like AWS ECR or GCP Artifact Registry.
+   - CD Pipeline: Trigger a deployment pipeline upon image storage, deploying on k8s, CloudRun, ECS, Fargate, etc.
+   - Next, set up Load Balancer/API gateway and Auto Scale Group to scale the application based on request load. Alternatively, a Kubernetes cluster with HPA could be configured for horizontal pod scaling.
 
-- Como estratégias de autenticação e autorização poderiam ser utilizadas soluções gerenciadas como o Cognito(AWS) ou o Keycloak para serem os servidores de identidade da aplicação.
+- Authentication and authorization strategies could include managed solutions like AWS Cognito or Keycloak as identity servers.
 
 ![Alt text](docs/architecture/v2.png)
 
-## Execução local
+## Local Execution
 
-### Utilizando docker compose
+### Using Docker Compose
 
-- Para executar o código localmente utilizando docker compose basta clonar o repositório e seguir os seguintes passos:
+- To run the code locally with Docker Compose, clone the repository and follow these steps:
 
-  - Criar um arquivo .env na raiz do projeto.
-  - Configurar as seguintes variáveis de ambiente neste arquivo .env:
-  - DB_URL_CONNECTION=postgres://user:password@svc-db:5432/postgres
-  - DB_TEST_URL_CONNECTION=postgres://user:password@svc-db-test:5432/postgres
+  - Create a `.env` file in the project root.
+  - Configure the following environment variables in this `.env` file:
+    - DB_URL_CONNECTION=postgres://user:password@svc-db:5432/postgres
+    - DB_TEST_URL_CONNECTION=postgres://user:password@svc-db-test:5432/postgres
+    - API_VERSION=v1
+    - PORT=3000
+  - Variables are detailed in `env-example.txt`.
+  - Create an internal Docker network to connect containers: **docker network create didomi-net**
+  - From the project root, run **docker-compose up**
+
+- These steps will create database and application containers, and the application will start automatically.
+
+### Using Installed Node
+
+To run the code locally, clone the repository and follow these steps:
+
+- Create a `.env` file in the project root.
+- Configure the following environment variables in this `.env` file:
+  - POSTGRES_URL_CONNECTION=production-database-url
+  - POSTGRES_TEST_URL_CONNECTION=production-database-test-url
   - API_VERSION=v1
   - PORT=3000
-  - Essas variáveis estão descritas no arquivo env-example.txt
-  - Criar a rede interna do docker para conectar os containers executando o comando: **docker network create didomi-net**
-  - Na raiz do projeto, executar o comando **docker-compose up**
+- Run commands from the project root:
+  - **npm install**
+  - **npm run start:dev**
 
-- Seguindo esses passos os container dos bancos de dados e da aplicação serão criados e a aplicação será iniciada automáticamente.
+**_Note_**: If Postgres is also installed locally, create two separate databases and set environment variables as:
 
-### Utilizando node instalado
+- postgres://user:password@host:port/dbName
 
-Para executar o código localmente basta clonar o repositório e seguir os seguintes passos:
+## Kubernetes Deployment
 
-- Criar um arquivo .env na raiz do projeto.
-- Configurar as seguintes variáveis de ambiente neste arquivo .env:
-- POSTGRES_URL_CONNECTION=production-database-url
-- POSTGRES_TEST_URL_CONNECTION=production-database-test-url
-- API_VERSION=v1
-- PORT=3000
-- Na raiz do projeto, executar os comandos:
-- **npm install**
-- **npm run start:dev**
-
-**_OBS_**  Caso tenha o postgres também instalado localmente basta criar dois bancos distintos e configurar as variáveis de ambiente no seguinte padrão:
-
-- postgres://user:password@host:5432/dbName
-
-## Deploy no kubernetes
-
-- Foi elaborado um arquivo de deployment, um de cervice e um de secret para realizar o deploy da aplicação em um cluster kubernetes.
-- Para isso devem ser seguidos os seguintes passos: considerando um ambiente local com kubectl e minikube instalados:
-  - Realizar o build da imagem docker, executando o comando: **docker build -t didomi-app-image .** . Estando na raiz do projeto
-  - Copiar a imagem gerada para o repositório interno de imagens do minikube, executando o comando: **minikube image load didomi-app-image:latest**
-  - Atualizar o arquivo secrets.yaml com as strings de conexão com os bancos de produção convertido para base64
-  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/secrets.yaml**
-  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/service.yaml**
-  - na raiz do projeto executar o comando **kubectl apply -f cd/k8s/deployment.yaml**
-  - Após isso pode ser feito um port forward do container dentro do kubernetes para que vc possa fazer requisições para ele utilizando sua rede local, executando o comando:
+- A deployment, service, and secrets file were created to deploy the application in a Kubernetes cluster.
+- Steps: with `kubectl` and `minikube` installed locally:
+  - Build Docker image: **docker build -t didomi-app-image .**
+  - Copy image to Minikube’s internal registry: **minikube image load didomi-app-image:latest**
+  - Update `secrets.yaml` with production DB connection strings in base64
+  - Run **kubectl apply -f cd/k8s/secrets.yaml**
+  - Run **kubectl apply -f cd/k8s/service.yaml**
+  - Run **kubectl apply -f cd/k8s/deployment.yaml**
+  - Then, forward the container port in Kubernetes to make requests to it via your local network with:
     - **kubectl port-forward <service-name> <localPort>:<servicePort>**
-    - Exemplo: **kubectl port-forward didomi-service 3000:3000**
-  - Assim, ao eviar requisições para http://localhost:3000/ vc estará acessando o pod dentro do k8s
+    - Example: **kubectl port-forward didomi-service 3000:3000**
+  - Send requests to http://localhost:3000/ to access the pod in k8s.
